@@ -1,0 +1,13 @@
+# Binaries & Tooling
+bin/
+*.exe
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# OS Specific
+.DS_Store
+Thumbs.db
