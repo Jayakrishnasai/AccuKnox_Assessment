@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 5 Kubernetes Security Attack Vectors - AccuKnox Assessment</title>
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #38bdf8;
+            --primary-dark: #0284c7;
+            --accent: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        .slide-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; }
+        .slide { display: none; width: 100%; max-width: 1200px; animation: fadeIn 0.4s ease-in-out forwards; }
+        .slide.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .badge { display: inline-block; padding: 0.35rem 0.8rem; background: rgba(56, 189, 248, 0.15); color: var(--primary); border-radius: 9999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+        h1 { font-size: 2.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
+        p.subtitle { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+        
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform 0.2s, border-color 0.2s; }
+        .card:hover { transform: translateY(-3px); border-color: rgba(56, 189, 248, 0.4); }
+        .card.accent { border-top: 4px solid var(--accent); }
+        .card.primary { border-top: 4px solid var(--primary); }
+        
+        .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        .card ul { list-style: none; }
+        .card li { margin-bottom: 0.6rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; position: relative; padding-left: 1.2rem; }
+        .card li::before { content: "•"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+        .card li strong { color: #e2e8f0; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border); }
+        th, td { padding: 0.9rem 1.2rem; text-align: left; font-size: 0.95rem; border-bottom: 1px solid var(--border); }
+        th { background: rgba(15, 23, 42, 0.9); color: var(--primary); font-weight: 700; }
+        tr:last-child td { border-bottom: none; }
+        td strong { color: #38bdf8; }
+
+        /* Controls */
+        .controls { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(15, 23, 42, 0.8); border-top: 1px solid var(--border); backdrop-filter: blur(8px); }
+        .btn { padding: 0.6rem 1.4rem; background: var(--primary-dark); color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn:hover { background: var(--primary); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .progress { color: var(--text-muted); font-weight: 600; font-size: 0.95rem; }
+        
+        .speaker-notes-box { margin-top: 1.25rem; background: rgba(0,0,0,0.5); border-left: 3px solid var(--primary); padding: 0.75rem 1rem; border-radius: 0.4rem; font-size: 0.85rem; color: #cbd5e1; }
+        .speaker-notes-box strong { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="slide-container">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide-1">
+            <span class="badge">AccuKnox Solution Engineer Trainee</span>
+            <h1>Top 5 Kubernetes Security Attack Vectors</h1>
+            <p class="subtitle">Anatomy of Modern Cloud-Native Vulnerabilities, In-Pod Exploits & Zero-Trust Mitigation</p>
+            <div class="grid-3" style="margin-top: 2rem;">
+                <div class="card primary">
+                    <div class="card-title">1. Control Plane & RBAC</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Exposed Kube-API servers, over-privileged ServiceAccounts, and secret leakage.</p>
+                </div>
+                <div class="card primary">
+                    <div class="card-title">2. Runtime & Escapes</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">In-pod RCE, SA Token theft, container breakouts, and host kernel compromise.</p>
+                </div>
+                <div class="card primary">
+                    <div class="card-title">3. Zero-Trust Defense</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">KubeArmor active LSM blocking, eBPF microsegmentation, and dynamic admission.</p>
+                </div>
+            </div>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1 min):</strong> Welcome the panel. Introduce the 4C's of cloud native security (Cloud, Cluster, Container, Code) and state that while Kubernetes automates orchestration, it expands the blast radius of misconfigurations and runtime exploits.
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" id="slide-2">
+            <span class="badge">Attack Vectors 1 & 2</span>
+            <h2>Control Plane & Supply Chain Threats</h2>
+            <div class="grid-2">
+                <div class="card accent">
+                    <div class="card-title">1. Misconfigured API Server & Over-Privileged RBAC</div>
+                    <ul>
+                        <li><strong>Vulnerability:</strong> Publicly exposed port 6443 or wildcard RBAC permissions (<code>*</code> verbs, cluster-admin).</li>
+                        <li><strong>Attack Chain:</strong> Leaked service account token enables rogue pod creation and cluster-wide privilege escalation.</li>
+                        <li><strong>Real Case:</strong> Tesla cryptojacking attack via exposed unauthenticated Kubernetes dashboard.</li>
+                        <li><strong>Mitigation:</strong> Private API endpoints, strict OIDC, automated RBAC audit (Kube-Bench).</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <div class="card-title">2. Insecure Supply Chain & Poisoned Images</div>
+                    <ul>
+                        <li><strong>Vulnerability:</strong> Base images containing known CVEs, untrusted registries, backdoored dependencies.</li>
+                        <li><strong>Attack Chain:</strong> Malicious image launches reverse shells or drops miners immediately upon pod initialization.</li>
+                        <li><strong>Real Case:</strong> Kinsing & Doki malware campaigns targeting public registries and Docker daemons.</li>
+                        <li><strong>Mitigation:</strong> Image signature verification (Cosign), CI/CD vulnerability scanning, and SBOM tracking.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1.5 min):</strong> Emphasize that static security in CI/CD is necessary but not sufficient. Highlight how exposed API servers and untrusted images provide attackers initial access.
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" id="slide-3">
+            <span class="badge">Attack Vectors 3, 4 & 5</span>
+            <h2>Runtime, Lateral Movement & Host Escapes</h2>
+            <div class="grid-3">
+                <div class="card accent">
+                    <div class="card-title">3. In-Pod RCE & SA Token Theft</div>
+                    <ul>
+                        <li><strong>Vulnerability:</strong> Web app flaws (Command Injection, LFI, Log4Shell).</li>
+                        <li><strong>Attack Chain:</strong> Exfiltrates token at <code>/var/run/secrets/...</code> to query K8s API directly.</li>
+                        <li><strong>Mitigation:</strong> KubeArmor file/process blocking, disable token automount.</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <div class="card-title">4. Flat Pod Networking & Lateral Drift</div>
+                    <ul>
+                        <li><strong>Vulnerability:</strong> Default open pod-to-pod east-west connectivity.</li>
+                        <li><strong>Attack Chain:</strong> Compromised pod scans internal VPC, DBs, and cloud metadata (<code>169.254.169.254</code>).</li>
+                        <li><strong>Mitigation:</strong> Default-deny NetworkPolicies, eBPF microsegmentation.</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <div class="card-title">5. Container Breakout & Host Escape</div>
+                    <ul>
+                        <li><strong>Vulnerability:</strong> <code>privileged: true</code>, <code>hostPID</code>, <code>CAP_SYS_ADMIN</code> or kernel CVEs.</li>
+                        <li><strong>Attack Chain:</strong> Escapes container namespace to gain root access on the K8s node.</li>
+                        <li><strong>Mitigation:</strong> Pod Security Standards (PSS), Seccomp, and BPF-LSM.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1.5 min):</strong> Detail how an attacker pivots once inside a pod: stealing the mounted JWT token, port-scanning internal namespaces, and leveraging container misconfigurations for host breakout.
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" id="slide-4">
+            <span class="badge">Zero-Trust Mitigation</span>
+            <h2>Defense-in-Depth & AccuKnox Architecture</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Attack Vector</th>
+                        <th>Traditional Security Approach</th>
+                        <th>AccuKnox / Modern Zero-Trust Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1. API / RBAC Abuse</td>
+                        <td>Periodic manual RBAC reviews, audit logs</td>
+                        <td><strong>Dynamic Admission Control (OPA/Kyverno) + Posture Drift Alerts</strong></td>
+                    </tr>
+                    <tr>
+                        <td>2. Supply Chain Risks</td>
+                        <td>Static image scanning in CI/CD</td>
+                        <td><strong>Signature verification + SBOM enforcement at Admission</strong></td>
+                    </tr>
+                    <tr>
+                        <td>3. In-Pod RCE & Token Theft</td>
+                        <td>Static container permissions</td>
+                        <td><strong>KubeArmor Active LSM/eBPF runtime process & token blocking</strong></td>
+                    </tr>
+                    <tr>
+                        <td>4. Lateral Movement</td>
+                        <td>Basic IP/Port NetworkPolicies</td>
+                        <td><strong>eBPF-driven zero-trust microsegmentation (L7 & DNS filtering)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>5. Container Breakout</td>
+                        <td>Pod Security Standards</td>
+                        <td><strong>Kernel LSM (AppArmor / SELinux / BPF-LSM) syscall prevention</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1 min):</strong> Conclude by showing how AccuKnox provides comprehensive CNAPP: shifting security left with posture management while enforcing active, inline zero-trust runtime protection with KubeArmor.
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="prevBtn" onclick="prevSlide()">← Previous</button>
+        <span class="progress" id="slideProgress">Slide 1 of 4</span>
+        <button class="btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+
+        function updateSlide() {
+            document.querySelectorAll('.slide').forEach((s, idx) => {
+                s.classList.toggle('active', idx + 1 === currentSlide);
+            });
+            document.getElementById('slideProgress').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateSlide();
+    </script>
+</body>
+</html>

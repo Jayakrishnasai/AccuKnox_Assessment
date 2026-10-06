@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dvwa
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dvwa-app
+  namespace: dvwa
+  labels:
+    app: dvwa
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dvwa
+  template:
+    metadata:
+      labels:
+        app: dvwa
+        tier: frontend
+    spec:
+      containers:
+      # Container 1: DVWA Web Frontend (cytopia/dvwa:php-7.4 - Most stable for DVWA)
+      - name: dvwa
+        image: cytopia/dvwa:php-7.4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: MYSQL_HOSTNAME
+          value: "127.0.0.1"
+        - name: MYSQL_DATABASE
+          value: "dvwa"
+        - name: MYSQL_USERNAME
+          value: "dvwa"
+        - name: MYSQL_PASSWORD
+          value: "password"
+        - name: RECAPTCHA_PUB_KEY
+          value: "6Lf32-EtAAAAAIqpvwieB3IqBttblbz89J5fpC3T"
+        - name: RECAPTCHA_PRIV_KEY
+          value: "6Lf32-EtAAAAAPd0H0U3p0dCjpeo7hdyJ6TRh48N"
+        - name: SECURITY_LEVEL
+          value: "low"
+        - name: PHPIDS_ENABLED
+          value: "0"
+        - name: PHPIDS_VERBOSE
+          value: "0"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+      # Container 2: MariaDB Database Backend
+      - name: db
+        image: mariadb:10.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpassword"
+        - name: MYSQL_DATABASE
+          value: "dvwa"
+        - name: MYSQL_USER
+          value: "dvwa"
+        - name: MYSQL_PASSWORD
+          value: "password"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1024Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dvwa-service
+  namespace: dvwa
+  labels:
+    app: dvwa
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080
+    protocol: TCP
+    name: http
+  selector:
+    app: dvwa

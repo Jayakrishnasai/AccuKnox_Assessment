@@ -1,0 +1,41 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: block-dvwa-rce-and-token-theft
+  namespace: dvwa
+spec:
+  severity: 1
+  message: "Alert and Block malicious process execution and credential access in DVWA"
+  tags: ["DVWA", "Zero-Trust", "MITRE-ATT&CK", "AccuKnox"]
+  selector:
+    matchLabels:
+      app: dvwa
+  process:
+    matchPaths:
+      # Block arbitrary shell spawns often used in RCE / Command Injection
+      - path: /bin/sh
+        action: Block
+      - path: /bin/bash
+        action: Block
+      - path: /bin/dash
+        action: Block
+    matchDirectories:
+      - dir: /sbin/
+        recursive: true
+        action: Block
+      - dir: /usr/sbin/
+        recursive: true
+        action: Block
+  file:
+    matchDirectories:
+      # Block unauthorized read access to Kubernetes Pod ServiceAccount tokens (Mitigates LFI token theft)
+      - dir: /var/run/secrets/kubernetes.io/serviceaccount/
+        recursive: true
+        action: Block
+    matchPaths:
+      # Block direct reading of sensitive system configuration files
+      - path: /etc/passwd
+        action: Block
+      - path: /etc/shadow
+        action: Block
+  action: Block

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falco vs KubeArmor - Deep Architectural Comparison</title>
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --blue: #38bdf8;
+            --accent: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        .slide-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; }
+        .slide { display: none; width: 100%; max-width: 1200px; animation: fadeIn 0.4s ease-in-out forwards; }
+        .slide.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .badge { display: inline-block; padding: 0.35rem 0.8rem; background: rgba(16, 185, 129, 0.15); color: var(--primary); border-radius: 9999px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+        h1 { font-size: 2.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; }
+        p.subtitle { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+        
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform 0.2s, border-color 0.2s; }
+        .card:hover { transform: translateY(-3px); border-color: rgba(16, 185, 129, 0.4); }
+        .card.falco { border-top: 4px solid var(--blue); }
+        .card.kubearmor { border-top: 4px solid var(--primary); }
+        
+        .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        .card ul { list-style: none; }
+        .card li { margin-bottom: 0.6rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; position: relative; padding-left: 1.2rem; }
+        .card li::before { content: "•"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+        .card.falco li::before { color: var(--blue); }
+        .card li strong { color: #e2e8f0; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border); }
+        th, td { padding: 0.85rem 1.2rem; text-align: left; font-size: 0.92rem; border-bottom: 1px solid var(--border); }
+        th { background: rgba(15, 23, 42, 0.9); color: var(--primary); font-weight: 700; }
+        tr:last-child td { border-bottom: none; }
+        td strong { color: var(--primary); }
+
+        .diagram-box { background: rgba(15, 23, 42, 0.8); border: 1px dashed var(--border); border-radius: 0.5rem; padding: 0.75rem; font-family: monospace; font-size: 0.8rem; line-height: 1.4; color: #38bdf8; margin: 0.75rem 0; }
+
+        /* Controls */
+        .controls { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(15, 23, 42, 0.8); border-top: 1px solid var(--border); backdrop-filter: blur(8px); }
+        .btn { padding: 0.6rem 1.4rem; background: var(--primary-dark); color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn:hover { background: var(--primary); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .progress { color: var(--text-muted); font-weight: 600; font-size: 0.95rem; }
+        
+        .speaker-notes-box { margin-top: 1.25rem; background: rgba(0,0,0,0.5); border-left: 3px solid var(--primary); padding: 0.75rem 1rem; border-radius: 0.4rem; font-size: 0.85rem; color: #cbd5e1; }
+        .speaker-notes-box strong { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="slide-container">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide-1">
+            <span class="badge">AccuKnox Solution Engineer Trainee</span>
+            <h1>Falco vs KubeArmor</h1>
+            <p class="subtitle">Deep Architectural Comparison: Detection & Alerting vs. Inline Active Enforcement</p>
+            <div class="grid-2" style="margin-top: 2rem;">
+                <div class="card falco">
+                    <div class="card-title" style="color: var(--blue);">Falco (Sysdig / CNCF Graduated)</div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.75rem;"><strong>Philosophy:</strong> Continuous Syscall Telemetry & Behavioral Anomaly Detection.</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Acts as a runtime security camera: alerts after suspicious system activity occurs.</p>
+                </div>
+                <div class="card kubearmor">
+                    <div class="card-title" style="color: var(--primary);">KubeArmor (AccuKnox / CNCF Sandbox)</div>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.75rem;"><strong>Philosophy:</strong> Kernel-Level Zero-Trust Active Prevention & Enforcement.</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Acts as an inline guard: leverages Linux Security Modules (LSMs) to block unauthorized execution instantly.</p>
+                </div>
+            </div>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1 min):</strong> Welcome the panel. Introduce the core runtime dilemma: organizations cannot afford to merely detect breaches post-execution when zero-days and ransomware strike in milliseconds. Compare Falco's detection model with KubeArmor's inline prevention model.
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" id="slide-2">
+            <span class="badge">Architectural Analysis</span>
+            <h2>How They Work Under the Hood</h2>
+            <div class="grid-2">
+                <div class="card falco">
+                    <div class="card-title" style="color: var(--blue);">FALCO: System Call Tracing</div>
+                    <div class="diagram-box">
+Syscall ──► eBPF Probe ──► Ring Buffer ──► Falco Engine (Userspace) ──► Alert Webhook
+                    </div>
+                    <ul>
+                        <li><strong>Hook Mechanism:</strong> Tracepoints / kprobes (<code>sys_enter</code> / <code>sys_exit</code>) via eBPF.</li>
+                        <li><strong>Execution Mode:</strong> <strong>Asynchronous / Post-incident</strong>.</li>
+                        <li><strong>Blocking:</strong> Cannot natively block in-flight syscalls (requires external pod termination scripts).</li>
+                    </ul>
+                </div>
+                <div class="card kubearmor">
+                    <div class="card-title" style="color: var(--primary);">KUBEARMOR: Linux Security Modules (LSM)</div>
+                    <div class="diagram-box" style="color: #4ade80;">
+Syscall ──► LSM Hooks (AppArmor / SELinux / BPF-LSM) ──► [INLINE PERMIT / BLOCK]
+                                                                  ▼
+                                                      eBPF Telemetry Logs
+                    </div>
+                    <ul>
+                        <li><strong>Hook Mechanism:</strong> AppArmor, SELinux, and <strong>BPF-LSM</strong> kernel hooks.</li>
+                        <li><strong>Execution Mode:</strong> <strong>Synchronous Inline Prevention</strong>.</li>
+                        <li><strong>Blocking:</strong> Natively returns <code>-EACCES</code> to halt unauthorized process execution and file reads instantly.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1.5 min):</strong> Detail the kernel execution paths. Explain that Falco evaluates events in userspace after execution, whereas KubeArmor leverages kernel LSM hooks to enforce authorization decisions before system calls complete.
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" id="slide-3">
+            <span class="badge">Comparative Analysis</span>
+            <h2>Feature & Capability Comparison Matrix</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Falco (Sysdig)</th>
+                        <th>KubeArmor (AccuKnox)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Primary Focus</td>
+                        <td>Threat Detection & Anomaly Auditing</td>
+                        <td><strong>Zero-Trust Active Prevention & Enforcement</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Kernel Enforcement</td>
+                        <td>None natively (Alerts only)</td>
+                        <td><strong>Native LSMs (AppArmor, SELinux, BPF-LSM)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Interception Point</td>
+                        <td>Post-execution (Asynchronous)</td>
+                        <td><strong>Pre-execution (Inline Blocking)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Policy Specification</td>
+                        <td>Custom Falco DSL / YAML Rules</td>
+                        <td><strong>Kubernetes-Native CRDs (<code>KubeArmorPolicy</code>)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Zero-Trust Hardening</td>
+                        <td>Complex rule tuning / high noise</td>
+                        <td><strong>Native Process & File Whitelisting / Blacklisting</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Workload Scope</td>
+                        <td>K8s & Linux Hosts</td>
+                        <td><strong>K8s, Linux VMs, Bare-Metal, & Edge (K3s)</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1.5 min):</strong> Walk through the matrix. Emphasize KubeArmor's Kubernetes-native CRD design which fits GitOps workflows (CI/CD, ArgoCD), compared to Falco's standalone DSL.
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" id="slide-4">
+            <span class="badge">Strategic Positioning</span>
+            <h2>Enterprise Strategy & AccuKnox Advantage</h2>
+            <div class="grid-2">
+                <div class="card kubearmor">
+                    <div class="card-title">When to Choose KubeArmor / AccuKnox?</div>
+                    <ul>
+                        <li><strong>Zero-Trust Requirements:</strong> Strict mandates where active blocking of unauthorized execution is required (PCI-DSS, NIST 800-53, CIS).</li>
+                        <li><strong>Hardened Microservices:</strong> Restricting containers to only execute designated binaries (e.g. blocking <code>curl</code>, <code>bash</code>, or token theft).</li>
+                        <li><strong>Edge & Multi-Cloud:</strong> Seamless protection across Kubernetes, bare-metal, and IoT/5G deployments.</li>
+                    </ul>
+                </div>
+                <div class="card kubearmor">
+                    <div class="card-title">The AccuKnox CNAPP Multiplier</div>
+                    <ul>
+                        <li><strong>Automated Policy Discovery:</strong> Observes container baseline behavior and auto-generates least-privilege KubeArmor CRDs.</li>
+                        <li><strong>Full-Lifecycle CNAPP:</strong> Unifies CSPM (posture), CWPP (runtime), and CIEM into a single intelligent platform.</li>
+                        <li><strong>Zero Overhead:</strong> In-kernel BPF-LSM execution guarantees negligible performance impact on live workloads.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="speaker-notes-box">
+                <strong>Speaker Notes (1 min):</strong> Summarize the solution engineer value proposition. Conclude by describing how AccuKnox transforms open-source KubeArmor into an automated enterprise CNAPP platform.
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="prevBtn" onclick="prevSlide()">← Previous</button>
+        <span class="progress" id="slideProgress">Slide 1 of 4</span>
+        <button class="btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+
+        function updateSlide() {
+            document.querySelectorAll('.slide').forEach((s, idx) => {
+                s.classList.toggle('active', idx + 1 === currentSlide);
+            });
+            document.getElementById('slideProgress').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        updateSlide();
+    </script>
+</body>
+</html>
